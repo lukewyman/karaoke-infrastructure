@@ -3,7 +3,7 @@ include "root" {
 }
 
 terraform {
-  source = "${get_parent_terragrunt_dir("root")}/../../resources/bastion"
+  source = "${get_parent_terragrunt_dir("root")}/../resources/bastion"
 }
 
 dependency "vpc" {
@@ -13,7 +13,7 @@ dependency "vpc" {
 inputs = {
   app_name = "karaoke"
   aws_region = "us-east-1"
-  environment = "dev"
+  environment = "shared"
   instance_keypair = "karaoke-key-pair"
   instance_type = "t3.small"
   subnet_ids = dependency.vpc.outputs.public_subnets

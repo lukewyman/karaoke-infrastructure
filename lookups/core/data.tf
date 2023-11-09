@@ -11,15 +11,15 @@ data "terraform_remote_state" "vpc" {
   }
 }
 
-# data "terraform_remote_state" "eks_cluster" {
-#   backend = "remote"
+data "terraform_remote_state" "eks_cluster" {
+  backend = "remote"
 
-#   config = {
-#     hostname = "app.terraform.io"
-#     organization = "spikes"
+  config = {
+    hostname = "app.terraform.io"
+    organization = "spikes"
 
-#     workspaces = {
-#       name = "${var.eks_workspace_prefix}-${var.environment}"
-#     }
-#   }
-# }
+    workspaces = {
+      name = "${var.eks_workspace_prefix}-${var.environment}"
+    }
+  }
+}

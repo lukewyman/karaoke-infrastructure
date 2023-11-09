@@ -3,7 +3,7 @@ include "root" {
 }
 
 terraform {
-  source = "${get_parent_terragrunt_dir("root")}/../../resources/eks-cluster"
+  source = "${get_parent_terragrunt_dir("root")}/../resources/eks-cluster"
 }
 
 dependency "vpc" {
@@ -23,5 +23,6 @@ inputs = {
   eks_cluster_version                 = "1.28"
   eks_eni_subnet_ids                  = dependency.vpc.outputs.public_subnets
   eks_node_group_name                 = "eks-node-group"
-  environment                         = "dev"
+  eks_oidc_ca_thumbprint              = "9e99a48a9960b14926bb7f3b02e22da2b0ab7280"
+  environment                         = "shared"
 }

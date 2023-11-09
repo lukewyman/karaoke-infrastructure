@@ -6,7 +6,7 @@ variable "app_name" {
 
 variable "aws_region" {
   description = "AWS region in which to deploy resources"
-  type = string 
+  type        = string
 }
 
 variable "cluster_endpoint_private_access" {
@@ -67,6 +67,11 @@ variable "eks_node_group_name" {
   description = "Name of EKS cluster's node group"
   type        = string
   # default     = "value"
+}
+
+variable "eks_oidc_ca_thumbprint" {
+  description = "OIDC Thumbprint for EKS cluster OIDC"
+  type        = string
 }
 
 variable "environment" {

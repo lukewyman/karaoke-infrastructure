@@ -3,13 +3,13 @@ include "root" {
 }
 
 terraform {
-  source = "${get_parent_terragrunt_dir("root")}/../../resources/vpc"
+  source = "${get_parent_terragrunt_dir("root")}/../resources/vpc"
 }
 
 inputs = {
   app_name                               = "karaoke"
   aws_region                             = "us-east-1"
-  environment                            = "dev"
+  environment                            = "shared"
   vpc_cidr_block                         = "10.0.0.0/16"
   vpc_create_database_subnet_route_table = true
   vpc_database_subnets                   = ["10.0.151.0/24", "10.0.152.0/24"]
