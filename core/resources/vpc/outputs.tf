@@ -19,7 +19,7 @@ output "private_subnets" {
 
 output "private_subnets_cidr_blocks" {
   description = "List of CIDR blocks for the private subnets"
-  value = module.karaoke_vpc.private_subnets_cidr_blocks
+  value       = module.karaoke_vpc.private_subnets_cidr_blocks
 }
 
 output "public_subnets" {
@@ -29,7 +29,7 @@ output "public_subnets" {
 
 output "public_subnets_cidr_blocks" {
   description = "List of CIDR blocks for the public subnets"
-  value = module.karaoke_vpc.public_subnets_cidr_blocks
+  value       = module.karaoke_vpc.public_subnets_cidr_blocks
 }
 
 output "vpc_cidr_block" {

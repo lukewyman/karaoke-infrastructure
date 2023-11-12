@@ -7,7 +7,7 @@ terraform {
 }
 
 dependency "core_lookup" {
-  config_path = "../core-lookup"
+  config_path = "../../core-lookup"
 }
 
 inputs = {

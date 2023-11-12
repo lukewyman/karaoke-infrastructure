@@ -5,23 +5,17 @@ resource "aws_db_instance" "postgres_instance" {
   engine_version         = var.db_engine_version
   identifier             = "${local.app_name}-postgresql-instance"
   instance_class         = var.db_instance_type
-  username               = aws_ssm_parameter.postgres_username.value
+  username               = "postgres"
   password               = random_password.password.result
   port                   = var.db_port
   skip_final_snapshot    = true
   storage_type           = var.db_storage_type
-  vpc_security_group_ids = []
+  vpc_security_group_ids = [aws_security_group.postgres_security_group.id]
 }
 
 resource "aws_db_subnet_group" "postgres_subnet_group" {
   name       = "${local.app_name}-postgres-subnet-group"
   subnet_ids = var.db_subnet_ids
-}
-
-resource "aws_ssm_parameter" "postgres_username" {
-  name  = "/app/karaoke/${var.environment}/POSTGRES_USERNAME"
-  type  = "String"
-  value = "appuser"
 }
 
 resource "aws_ssm_parameter" "postgres_password" {
