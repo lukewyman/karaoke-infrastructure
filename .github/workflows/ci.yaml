@@ -5,6 +5,7 @@ on:
 env:
   TF_VERSION: '1.6.3'
   TG_VERSION: '0.53.0'
+  TF_WORKSPACE: 'test'
 
 jobs:
   deploy_and_test:
@@ -36,12 +37,14 @@ jobs:
 
       - name: Set Terraform Workspace
         id: set_tf
-        run: export TF_WORKSPACE=test
+        run: |
+          export TF_WORKSPACE=test
+          echo $TF_WORKSPACE
 
       - name: Debug Terraform 
         run: |
           echo $TF_WORKSPACE
-          ls /github/workspace/databases/deploy/test
+          ls ./databases/deploy/test
 
       - name: Deploy Test Databases
         id: deploy_test_dbs
