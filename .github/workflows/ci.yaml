@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
 
 env:
-  TF_VERSION: '>= 1.6.2'
+  TF_VERSION: '1.6.2'
   TG_VERSION: '0.53.0'
   TF_WORKSPACE: 'test'
 
@@ -39,6 +39,7 @@ jobs:
         id: setup_tf
         uses: hashicorp/setup-terraform@v2
         with:
+          terraform_version: ${{ env.TF_VERSION }}
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
       - name: Deploy Test Databases
@@ -47,5 +48,7 @@ jobs:
         env:
           INPUT_PRE_EXEC_1: export TF_WORKSPACE=test
         with:
+          tf_version: ${{ env.TF_VERSION }}
+          tg_version: ${{ env.TG_VERSION }}
           tg_dir: ./databases/deploy/test
           tg_command: 'run-all apply'
