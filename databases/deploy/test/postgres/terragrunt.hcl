@@ -11,6 +11,7 @@ dependency "core_lookup" {
 }
 
 inputs = {
+  app_name = "karaoke"
   aws_region                         = "us-east-1"
   cluster_certificate_authority_data = dependency.core_lookup.outputs.cluster_certificate_authority_data
   eks_cluster_endpoint               = dependency.core_lookup.outputs.eks_cluster_endpoint

@@ -49,3 +49,15 @@ resource "helm_release" "ebs_csi_driver" {
   }
 }
 
+resource "kubernetes_storage_class_v1" "ebs_sc" {
+  depends_on = [
+    helm_release.ebs_csi_driver
+  ]
+
+  metadata {
+    name = "ebs-sc"
+  }
+
+  storage_provisioner = "ebs.csi.aws.com"
+  volume_binding_mode = "WaitForFirstConsumer"
+}
