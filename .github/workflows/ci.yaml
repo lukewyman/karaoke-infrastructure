@@ -1,0 +1,52 @@
+name: Continuous Integration
+on: 
+  workflow_dispatch:
+
+env:
+  TF_VERSION: '1.6.3'
+  TG_VERSION: '0.53.0'
+
+jobs:
+  deploy_and_test:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout 
+        id: checkout 
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        id: aws_credentials
+        uses: aws-actions/configure-aws-credentials@v2 
+        with:
+          role-to-assume: arn:aws:iam::919980474747:role/github-actions
+          aws-region: us-east-1 
+      
+      - name: Setup Python 3.10 
+        id: python_setup
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10.6'
+          architecture: 'x64'
+
+      - name: Update kubeconfig
+        id: update_kubeconfig
+        run: aws cli update-kubeconfig --region us-east-1 --name xxxxx
+
+      - name: Set Terraform Workspace
+        id: set_tf
+        run: export TF_WORKSPACE=test
+
+      - name: Deploy Test Databases
+        id: deploy_test_dbs
+        uses: gruntwork-io/terragrunt-action@v2
+        with:
+          tf_version: ${{ env.TF_VERSION }}
+          tg_version: ${{ env.TG_VERSION }}
+          tg_dir: ./databases/deploy/test
+          tg_command: 'apply'
+
+      
+
+
+
+      

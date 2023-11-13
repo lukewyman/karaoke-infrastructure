@@ -8,6 +8,10 @@ terraform {
 
 dependency "vpc" {
   config_path = "../vpc"
+
+  mock_outputs = {
+    public_subnets = ["mock_subnet_1", "mock_subnet_2"]
+  }
 }
 
 inputs = {

@@ -8,6 +8,13 @@ terraform {
 
 dependency "eks_cluster" {
   config_path = "../eks-cluster"
+
+  mock_outputs = {
+    cluster_certificate_authority_data  = "bW9ja19jZXJ0X2F1dGhfZGF0YQ=="
+    eks_cluster_endpoint                = "mock_cluster_endpoint"
+    eks_cluster_id                      = "mock_cluster_id"
+    aws_iam_openid_connect_provider_arn = "mock_oicd_arn"
+  }
 }
 
 inputs = {
