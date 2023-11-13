@@ -31,9 +31,9 @@ jobs:
           python-version: '3.10.6'
           architecture: 'x64'
 
-      - name: Update kubeconfig
-        id: update_kubeconfig
-        run: aws eks update-kubeconfig --region us-east-1 --name karaoke-shared-eks-cluster
+      # - name: Update kubeconfig
+      #   id: update_kubeconfig
+      #   run: aws eks update-kubeconfig --region us-east-1 --name karaoke-shared-eks-cluster
 
       - name: Set Terraform Workspace
         id: set_tf
