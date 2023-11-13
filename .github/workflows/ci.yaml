@@ -35,20 +35,12 @@ jobs:
         id: update_kubeconfig
         run: aws eks update-kubeconfig --region us-east-1 --name karaoke-shared-eks-cluster
 
-      - name: Setup Terraform
-        id: setup_tf
-        uses: hashicorp/setup-terraform@v2
-        with:
-          terraform_version: ${{ env.TF_VERSION }}
-          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-
       - name: Deploy Test Databases
         id: deploy_test_dbs
-        uses: gruntwork-io/terragrunt-action@v2
-        env:
-          INPUT_PRE_EXEC_1: export TF_WORKSPACE=test
+        uses: the-commons-project/terragrunt-github-actions@master
         with:
-          tf_version: ${{ env.TF_VERSION }}
-          tg_version: ${{ env.TG_VERSION }}
-          tg_dir: ./databases/deploy/test
-          tg_command: 'run-all apply'
+          tf_actions_version: ${{ env.TF_VERSION }}
+          tg_actions_version: ${{ env.TG_VERSION }}
+          tf_actions_cli_credentials_token: ${{ secrets.TF_API_TOKEN }}
+          tf_actions_working_dir: ./databases/deploy/test
+          tf_actions_subcommand: apply
