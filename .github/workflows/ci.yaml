@@ -38,6 +38,11 @@ jobs:
         id: set_tf
         run: export TF_WORKSPACE=test
 
+      - name: Debug Terraform 
+        run: |
+          echo $TF_WORKSPACE
+          ls /github/workspace/databases/deploy/test
+
       - name: Deploy Test Databases
         id: deploy_test_dbs
         uses: gruntwork-io/terragrunt-action@v2
@@ -45,7 +50,7 @@ jobs:
           tf_version: ${{ env.TF_VERSION }}
           tg_version: ${{ env.TG_VERSION }}
           tg_dir: ./databases/deploy/test
-          tg_command: 'apply'
+          tg_command: 'run-all apply'
 
       
 
