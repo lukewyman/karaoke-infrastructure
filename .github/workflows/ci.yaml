@@ -9,6 +9,8 @@ env:
 jobs:
   deploy_and_test:
     runs-on: ubuntu-22.04
+    permissions:
+      id-token: write
     steps:
       - name: Checkout 
         id: checkout 
