@@ -44,5 +44,6 @@ jobs:
           tf_actions_version: ${{ env.TF_VERSION }}
           tg_actions_version: ${{ env.TG_VERSION }}
           tf_actions_cli_credentials_token: ${{ secrets.TF_API_TOKEN }}
+          tf_actions_comment: false
           tf_actions_working_dir: ./databases/deploy/test
           tf_actions_subcommand: apply

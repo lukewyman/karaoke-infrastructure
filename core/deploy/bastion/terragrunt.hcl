@@ -11,7 +11,7 @@ dependency "vpc" {
 
   mock_outputs = {
     public_subnets = ["mock_subnet_1", "mock_subnet_2"]
-    vpc_id     = "mock_vpc_id"
+    vpc_id         = "mock_vpc_id"
   }
 }
 

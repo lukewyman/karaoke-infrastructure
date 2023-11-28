@@ -1,20 +1,4 @@
-resource "aws_iam_policy" "ebs_csi_iam_policy" {
-  name        = local.app_name
-  path        = "/"
-  description = "EBS CSI IAM Policy"
-  policy      = data.http.ebs_csi_iam_policy.response_body
-}
-
-resource "aws_iam_role" "ebs_csi_iam_role" {
-  name = "${local.app_name}-ebs-csi-iam-role"
-
-  assume_role_policy = data.aws_iam_policy_document.assume_role_policy.json
-}
-
-resource "aws_iam_role_policy_attachment" "ebs_csi_iam_role_policy" {
-  policy_arn = aws_iam_policy.ebs_csi_iam_policy.arn
-  role       = aws_iam_role.ebs_csi_iam_role.name
-}
+#EBS CSI DRIVER
 
 resource "helm_release" "ebs_csi_driver" {
   depends_on = [
@@ -60,4 +44,59 @@ resource "kubernetes_storage_class_v1" "ebs_sc" {
 
   storage_provisioner = "ebs.csi.aws.com"
   volume_binding_mode = "WaitForFirstConsumer"
+}
+
+# LOAD BALANCER CONTROLLER
+
+resource "helm_release" "loadbalancer_controller" {
+  depends_on = [aws_iam_role.lbc_iam_role]
+  name       = "aws-load-balancer-controller"
+
+  repository = "https://aws.github.io/eks-charts"
+  chart      = "aws-load-balancer-controller"
+
+  namespace = "kube-system"
+
+  set {
+    name  = "image.repository"
+    value = "602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon/aws-load-balancer-controller"
+  }
+
+  set {
+    name  = "serviceAccount.create"
+    value = "true"
+  }
+
+  set {
+    name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+    value = aws_iam_role.lbc_iam_role.arn
+  }
+
+  set {
+    name  = "vpcId"
+    value = var.vpc_id
+  }
+
+  set {
+    name  = "region"
+    value = var.aws_region
+  }
+
+  set {
+    name  = "clusterName"
+    value = var.eks_cluster_id
+  }
+}
+
+resource "kubernetes_ingress_class_v1" "ingress_class_default" {
+  depends_on = [helm_release.loadbalancer_controller]
+  metadata {
+    name = "my-aws-ingress-class"
+    annotations = {
+      "ingressclass.kubernetes.io/is-default-class" = "true"
+    }
+  }
+  spec {
+    controller = "ingress.k8s.aws/alb"
+  }
 }

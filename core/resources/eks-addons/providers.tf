@@ -3,10 +3,10 @@ provider "aws" {
 }
 
 provider "kubernetes" {
-    host                   = var.eks_cluster_endpoint
-    cluster_ca_certificate = base64decode(var.cluster_certificate_authority_data)
-    token                  = data.aws_eks_cluster_auth.cluster_auth.token
-  }
+  host                   = var.eks_cluster_endpoint
+  cluster_ca_certificate = base64decode(var.cluster_certificate_authority_data)
+  token                  = data.aws_eks_cluster_auth.cluster_auth.token
+}
 
 provider "helm" {
   kubernetes {
