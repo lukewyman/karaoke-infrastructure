@@ -91,7 +91,7 @@ resource "helm_release" "loadbalancer_controller" {
 resource "kubernetes_ingress_class_v1" "ingress_class_default" {
   depends_on = [helm_release.loadbalancer_controller]
   metadata {
-    name = "my-aws-ingress-class"
+    name = "karaoke-ingress-class"
     annotations = {
       "ingressclass.kubernetes.io/is-default-class" = "true"
     }
@@ -99,4 +99,46 @@ resource "kubernetes_ingress_class_v1" "ingress_class_default" {
   spec {
     controller = "ingress.k8s.aws/alb"
   }
+}
+
+
+# EXTERNAL DNS CONTROLLER
+resource "helm_release" "external_dns_controller" {
+  depends_on = [ aws_iam_role.external_dns_iam_role ]
+  name = "external-dns"
+
+  repository = "https://kubernetes-sigs.github.io/external-dns/"
+  chart = "external-dns"
+  
+  namespace = "default"
+
+  set {
+    name = "image.repository"
+    value = "registry.k8s.io/external-dns/external-dns"
+  }
+
+  set {
+    name = "serviceAccount.create"
+    value = true 
+  }
+
+   set {
+    name  = "serviceAccount.name"
+    value = "external-dns"
+  }
+
+  set {
+    name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+    value = "${aws_iam_role.external_dns_iam_role.arn}"
+  }
+
+  set {
+    name  = "provider" # Default is aws (https://github.com/kubernetes-sigs/external-dns/tree/master/charts/external-dns)
+    value = "aws"
+  }    
+
+  set {
+    name  = "policy" # Default is "upsert-only" which means DNS records will not get deleted even equivalent Ingress resources are deleted (https://github.com/kubernetes-sigs/external-dns/tree/master/charts/external-dns)
+    value = "sync"   # "sync" will ensure that when ingress resource is deleted, equivalent DNS record in Route53 will get deleted
+  }    
 }

@@ -1,3 +1,16 @@
+resource "kubernetes_service_v1" "docdb_service" {
+  depends_on = [ aws_docdb_cluster.docdb ]
+
+  metadata {
+    name = "mongo"
+  }
+
+  spec {
+    type = "ExternalName"
+    external_name = aws_docdb_cluster.docdb.endpoint
+  }
+}
+
 resource "aws_docdb_cluster" "docdb" {
   cluster_identifier              = "${local.app_name}-cluster"
   engine                          = "docdb"

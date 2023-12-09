@@ -15,7 +15,7 @@ terraform {
     organization = "spikes"
 
     workspaces {
-      prefix = "karaoke-docdb-"
+      prefix = "karaoke-eks-addons-"
     }
   }
 }
