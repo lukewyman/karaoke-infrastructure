@@ -1,3 +1,16 @@
+resource "kubernetes_service_v1" "postgres_service" {
+  depends_on = [ aws_db_instance.postgres_instance ]
+
+  metadata {
+    name = "postgres"
+  }
+
+  spec {
+    type = "ExternalName"
+    external_name = aws_db_instance.postgres_instance.endpoint
+  }
+}
+
 resource "aws_db_instance" "postgres_instance" {
   allocated_storage      = var.allocated_storage
   deletion_protection    = false
