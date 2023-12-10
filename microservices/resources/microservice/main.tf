@@ -4,10 +4,11 @@ resource "kubernetes_deployment_v1" "web_app" {
     labels = {
       app = var.service_name
     }
+    namespace = "${var.app_name}-${var.environment}"
   }
 
   spec {
-    replicas = 2 
+    replicas = 1
 
     selector {
       match_labels = {
@@ -23,6 +24,8 @@ resource "kubernetes_deployment_v1" "web_app" {
       }
 
       spec {
+        service_account_name = kubernetes_service_account_v1.microservice_service_account.metadata.0.name
+
         container {
           image = "${data.aws_ecr_repository.image_repository.repository_url}:${var.image_version}"
           name = var.service_name
@@ -58,6 +61,7 @@ resource "kubernetes_deployment_v1" "web_app" {
 resource "kubernetes_service_v1" "service" {
   metadata {
     name = "${var.service_name}-service"
+    namespace = "${var.app_name}-${var.environment}"
   }
 
   spec {

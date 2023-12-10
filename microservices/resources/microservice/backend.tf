@@ -15,7 +15,7 @@ terraform {
     organization = "spikes"
 
     workspaces {
-      prefix = "karaoke-eks-addons-"
+      prefix = "karaoke-song-library-"
     }
   }
 }

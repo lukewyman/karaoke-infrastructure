@@ -3,11 +3,11 @@ include "root" {
 }
 
 terraform {
-  source = "${get_parent_terragrunt_dir("root")}/../../lookups/databases"
+  source = "${get_parent_terragrunt_dir("root")}/../../../lookups/databases"
 }
 
 inputs = {
-  environment          = "shared"
-  vpc_workspace_prefix = "karaoke-vpc"
-  eks_workspace_prefix = "karaoke-eks-cluster"
+  environment = "dev"
+  mongo_workspace_prefix = "karaoke-docdb"
+  postgres_workspace_prefix = "karaoke-postgres"
 }

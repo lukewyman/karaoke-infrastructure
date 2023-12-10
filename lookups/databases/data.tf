@@ -6,20 +6,20 @@ data "terraform_remote_state" "mongo" {
     organization = "spikes"
 
     workspaces = {
-      name = "${var.context}-${var.environment}-something, something"
+      name = "${var.mongo_workspace_prefix}-${var.environment}"
     }
   }
 }
 
-data "terraform_remote_state" "postgres" {
-  backend = "remote"
+# data "terraform_remote_state" "postgres" {
+#   backend = "remote"
 
-  config = {
-    hostname = "app.terraform.io"
-    organization = "spikes"
+#   config = {
+#     hostname = "app.terraform.io"
+#     organization = "spikes"
 
-    workspaces = {
-      name = "${var.context}-${var.environment}-something, something"
-    }
-  }
-}
+#     workspaces = {
+#       name = "${var.postgres_workspace_prefix}-${var.environment}"
+#     }
+#   }
+# }

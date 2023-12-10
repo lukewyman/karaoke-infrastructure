@@ -3,6 +3,7 @@ resource "kubernetes_service_v1" "docdb_service" {
 
   metadata {
     name = "mongo"
+    namespace = "${var.app_name}-${var.environment}"
   }
 
   spec {
