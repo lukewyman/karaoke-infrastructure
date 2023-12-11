@@ -26,3 +26,5 @@ inputs = {
   public_subnets_cidr_blocks         = dependency.core_lookup.outputs.public_subnets_cidr_blocks
   vpc_id                             = dependency.core_lookup.outputs.vpc_id
 }
+
+skip = true 
