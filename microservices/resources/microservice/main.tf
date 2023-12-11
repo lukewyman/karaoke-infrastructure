@@ -1,3 +1,24 @@
+resource "kubernetes_service_v1" "service" {
+  metadata {
+    name      = "${var.service_name}-service"
+    namespace = "${var.app_name}-${var.environment}"
+  }
+
+  spec {
+    selector = {
+      app = kubernetes_deployment_v1.web_app.spec.0.selector.0.match_labels.app
+    }
+
+    port {
+      port        = "80"
+      target_port = var.container_port
+      node_port   = var.node_port
+    }
+
+    type = "NodePort"
+  }
+}
+
 resource "kubernetes_deployment_v1" "web_app" {
   metadata {
     name = var.service_name
@@ -28,29 +49,21 @@ resource "kubernetes_deployment_v1" "web_app" {
 
         container {
           image = "${data.aws_ecr_repository.image_repository.repository_url}:${var.image_version}"
-          name = var.service_name
+          name  = var.service_name
+
           port {
             container_port = var.container_port
           }
-          env {
-            name = "MONGO_ARCHITECTURE"
-            value = "replicaset"
-          }
-          env {
-            name = "MONGO_HOSTNAME"
-            value = "mongo"
-          }
-          env {
-            name = "MONGO_PORT"
-            value = var.mongo_port
-          }
-          env {
-            name = "MONGO_USERNAME"
-            value = data.aws_ssm_parameter.mongo_username.value
-          }
-          env {
-            name = "MONGO_PASSWORD"
-            value = data.aws_ssm_parameter.mongo_password.value
+
+          env_from {
+            # FIGURE OUT HOW TO MAKE THIS BLOCK CONDITIONAL
+            config_map_ref {
+              name = kubernetes_config_map_v1.env_vars.0.metadata.0.name 
+            }
+
+            secret_ref {
+              name = kubernetes_secret_v1.env_secrets.0.metadata.0.name
+            }
           }
         }
       }
@@ -58,23 +71,28 @@ resource "kubernetes_deployment_v1" "web_app" {
   }
 }
 
-resource "kubernetes_service_v1" "service" {
+resource "kubernetes_config_map_v1" "env_vars" {
+  count = local.create_config_map ? 1 : 0
+
   metadata {
-    name = "${var.service_name}-service"
+    name      = "environment-variables"
     namespace = "${var.app_name}-${var.environment}"
   }
 
-  spec {
-    selector = {
-      app = kubernetes_deployment_v1.web_app.spec.0.selector.0.match_labels.app
-    }
+  data = merge(
+    { for n, v in var.env : n => v },
+    { for n, v in var.var.env_parameter_store_text : n => data.data.aws_ssm_parameter.param_text[v].value }
+  )
+}
 
-    port {
-      port = "80"
-      target_port = var.container_port
-      node_port = var.node_port
-    }
+resource "kubernetes_secret_v1" "env_secrets" {
+  count = local.create_secret ? 1 : 0
 
-    type = "NodePort"
+  metadata {
+    name      = "secrets"
+    namespace = "${var.app_name}-${var.environment}"
   }
+
+  data = { for s in var.env_data.aws_ssm_parameter.param_secret : s =>
+  aws_ssm_parameter.param_secret[s].value }
 }
