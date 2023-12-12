@@ -50,13 +50,13 @@ resource "aws_docdb_subnet_group" "docdb_subnets" {
 }
 
 resource "aws_ssm_parameter" "docdb_username" {
-  name  = "/app/karaoke/DOCDB_USERNAME"
+  name  = "/app/karaoke/${var.environment}/DOCDB_USERNAME"
   type  = "String"
   value = "appuser"
 }
 
 resource "aws_ssm_parameter" "docdb_password" {
-  name  = "/app/karaoke/DOCDB_PASSWORD"
+  name  = "/app/karaoke/${var.environment}/DOCDB_PASSWORD"
   type  = "SecureString"
   value = random_password.password.result
 }

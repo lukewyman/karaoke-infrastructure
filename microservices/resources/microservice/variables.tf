@@ -33,43 +33,33 @@ variable "eks_cluster_id" {
   type        = string
 }
 
-variable "environment" {
-  description = ""
-  type        = string
-}
-
 variable "env" {
   description = ""
   type        = map(string)
-  default = {
-    "MONGO_ARCHITECTURE" = "replicaset"
-    "MONGO_HOSTNAME"     = "mongo"
-    "MONGO_PORT"         = "27017"
-  }
-}
-
-variable "env_parameter_store_text" {
-  description = ""
-  type        = list(string)
-  default = [
-    "MONGO_USERNAME"
-  ]
+  default     = {}
 }
 
 variable "env_parameter_store_secret" {
   description = ""
   type        = list(string)
-  default = [
-    "MONGO_PASSWORD"
-  ]
+  default     = []
+}
+
+variable "env_parameter_store_text" {
+  description = ""
+  type        = list(string)
+  default     = []
+}
+
+variable "environment" {
+  description = ""
+  type        = string
 }
 
 variable "iam_policy_arns" {
   description = "IAM policies for this micorservice's k8s service account"
   type        = list(string)
-  # default = [
-  #   "arn:aws:iam::aws:policy/AmazonDocDBFullAccess"
-  # ]
+  default     = []
 }
 
 variable "image_repository_name" {
@@ -78,11 +68,6 @@ variable "image_repository_name" {
 }
 
 variable "image_version" {
-  description = ""
-  type        = string
-}
-
-variable "mongo_port" {
   description = ""
   type        = string
 }

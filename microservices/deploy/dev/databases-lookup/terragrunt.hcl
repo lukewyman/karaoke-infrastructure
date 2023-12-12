@@ -7,7 +7,7 @@ terraform {
 }
 
 inputs = {
-  environment = "dev"
-  mongo_workspace_prefix = "karaoke-docdb"
+  environment               = "dev"
+  mongo_workspace_prefix    = "karaoke-docdb"
   postgres_workspace_prefix = "karaoke-postgres"
 }

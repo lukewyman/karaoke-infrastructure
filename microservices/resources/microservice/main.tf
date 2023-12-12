@@ -1,6 +1,6 @@
 resource "kubernetes_service_v1" "service" {
   metadata {
-    name      = "${var.service_name}-service"
+    name      = "${var.service_name}"
     namespace = "${var.app_name}-${var.environment}"
   }
 
@@ -25,7 +25,7 @@ resource "kubernetes_deployment_v1" "web_app" {
     labels = {
       app = var.service_name
     }
-    namespace = "${var.app_name}-${var.environment}"
+    namespace = local.app_name
   }
 
   spec {
@@ -58,7 +58,7 @@ resource "kubernetes_deployment_v1" "web_app" {
           env_from {
             # FIGURE OUT HOW TO MAKE THIS BLOCK CONDITIONAL
             config_map_ref {
-              name = kubernetes_config_map_v1.env_vars.0.metadata.0.name 
+              name = kubernetes_config_map_v1.env_vars.0.metadata.0.name
             }
 
             secret_ref {
@@ -76,12 +76,12 @@ resource "kubernetes_config_map_v1" "env_vars" {
 
   metadata {
     name      = "environment-variables"
-    namespace = "${var.app_name}-${var.environment}"
+    namespace = local.app_name
   }
 
   data = merge(
     { for n, v in var.env : n => v },
-    { for n, v in var.var.env_parameter_store_text : n => data.data.aws_ssm_parameter.param_text[v].value }
+    { for n in var.env_parameter_store_text : n => data.aws_ssm_parameter.param_text[n].value }
   )
 }
 
@@ -93,6 +93,5 @@ resource "kubernetes_secret_v1" "env_secrets" {
     namespace = "${var.app_name}-${var.environment}"
   }
 
-  data = { for s in var.env_data.aws_ssm_parameter.param_secret : s =>
-  aws_ssm_parameter.param_secret[s].value }
+  data = { for s in var.env_parameter_store_secret : s => data.aws_ssm_parameter.param_secret[s].value }
 }
