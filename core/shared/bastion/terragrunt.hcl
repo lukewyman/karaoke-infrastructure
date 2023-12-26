@@ -3,7 +3,7 @@ include "root" {
 }
 
 terraform {
-  source = "${get_parent_terragrunt_dir("root")}/../../resources/bastion"
+  source = "${get_parent_terragrunt_dir("root")}/core/resources/bastion"
 }
 
 dependency "vpc" {
@@ -25,4 +25,4 @@ inputs = {
   vpc_id           = dependency.vpc.outputs.vpc_id
 }
 
-skip = true
+skip = false

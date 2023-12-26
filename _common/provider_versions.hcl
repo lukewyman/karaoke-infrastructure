@@ -8,6 +8,18 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.23"
     }
+    helm = {
+      source  = "hashicorp/helm"
+      version = "~> 2.11"
+    }
+    http = {
+      source  = "hashicorp/http"
+      version = "~> 3.4"
+    }
+    kubernetes = {
+      source = "hashicorp/kubernetes"
+      version = "~> 2.24"
+    }
   }
 }
   EOF
