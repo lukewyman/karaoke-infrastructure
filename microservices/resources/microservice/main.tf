@@ -45,7 +45,7 @@ resource "kubernetes_deployment_v1" "web_app" {
       }
 
       spec {
-        service_account_name = kubernetes_service_account_v1.microservice_service_account.metadata.0.name
+        service_account_name = var.service_account_name
 
         container {
           image = "${data.aws_ecr_repository.image_repository.repository_url}:${var.image_version}"

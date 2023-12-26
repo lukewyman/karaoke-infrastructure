@@ -1,0 +1,3 @@
+CREATE USER singers_app WITH
+  LOGIN
+  PASSWORD 'pa55w0RD';

@@ -27,6 +27,7 @@ inputs = {
   environment                         = "dev"
   migrations_dir                      = "migrations"
   private_subnets_cidr_blocks         = dependency.core_lookup.outputs.private_subnets_cidr_blocks
+  postgres_username                   = "singers_app"
   public_subnets_cidr_blocks          = dependency.core_lookup.outputs.public_subnets_cidr_blocks
   vpc_id                              = dependency.core_lookup.outputs.vpc_id
 }

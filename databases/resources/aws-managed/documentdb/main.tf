@@ -29,7 +29,7 @@ resource "aws_docdb_cluster" "docdb" {
 
 resource "aws_docdb_cluster_parameter_group" "docdb_parameter_group" {
   family = "docdb4.0"
-  name   = "${local.app_name}${terraform.workspace}-pg"
+  name   = "${local.app_name}-pg"
 
   parameter {
     name  = "tls"
@@ -52,7 +52,7 @@ resource "aws_docdb_subnet_group" "docdb_subnets" {
 resource "aws_ssm_parameter" "docdb_username" {
   name  = "/app/karaoke/${var.environment}/DOCDB_USERNAME"
   type  = "String"
-  value = "appuser"
+  value = var.docdb_username
 }
 
 resource "aws_ssm_parameter" "docdb_password" {

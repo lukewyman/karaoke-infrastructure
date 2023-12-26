@@ -19,6 +19,7 @@ inputs = {
   docdb_instance_count               = 1
   docdb_port                         = "27017"
   docdb_subnet_ids                   = dependency.core_lookup.outputs.db_subnet_ids
+  docdb_username                     = "karaoke_app"
   eks_cluster_endpoint               = dependency.core_lookup.outputs.eks_cluster_endpoint
   eks_cluster_id                     = dependency.core_lookup.outputs.eks_cluster_id
   environment                        = "dev"
@@ -27,4 +28,4 @@ inputs = {
   vpc_id                             = dependency.core_lookup.outputs.vpc_id
 }
 
-skip = true 
+skip = false

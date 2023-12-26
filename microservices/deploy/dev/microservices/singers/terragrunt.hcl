@@ -27,11 +27,15 @@ inputs = {
   eks_cluster_id                      = dependency.core_lookup.outputs.eks_cluster_id
   env = {
     "POSTGRES_HOSTNAME" = "postgres"
-    "POSTGRES_PORT"     = "27017"
-    "POSTGRES_USERNAME" = "postgres"
+    "POSTGRES_PORT"     = "5432"
+    "POSTGRES_USERNAME" = "singers_app"
+    "POSTGRES_DB"       = "singers"
   }
   env_parameter_store_secret = [
     "POSTGRES_PASSWORD"
+  ]
+  env_parameter_store_text = [
+    "POSTGRES_USERNAME"
   ]
   environment = "dev"
   iam_policy_arns = [
@@ -41,5 +45,34 @@ inputs = {
   image_version         = "v1"
   namespace_root        = "karaoke"
   node_port             = "31282"
+  service_account_name  = ""
   service_name          = "singers"
+}
+
+generate "backend" {
+  path = "backend.tf"
+  if_exists = "overwrite"
+  contents = <<EOF 
+terraform {
+  required_version = ">= 1.6.2"
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.23"
+    }
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "~> 2.24"
+    }
+  }
+
+  backend "remote" {
+    organization = "spikes"
+
+    workspaces {
+      prefix = "karaoke-singers-"
+    }
+  }
+}
+  EOF
 }

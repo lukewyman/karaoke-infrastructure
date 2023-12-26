@@ -19,8 +19,8 @@ resource "aws_db_instance" "postgres_instance" {
   engine_version         = var.db_engine_version
   identifier             = "${local.app_name}-postgresql-instance"
   instance_class         = var.db_instance_type
-  username               = local.postgres_user
-  password               = random_password.password.result
+  username               = "postgres"
+  password               = random_password.postgres_password.result
   port                   = var.db_port
   skip_final_snapshot    = true
   storage_type           = var.db_storage_type
@@ -33,13 +33,30 @@ resource "aws_db_subnet_group" "postgres_subnet_group" {
   subnet_ids = var.db_subnet_ids
 }
 
-resource "aws_ssm_parameter" "postgres_password" {
-  name  = "/app/karaoke/${var.environment}/POSTGRES_PASSWORD"
-  type  = "SecureString"
+resource "aws_ssm_parameter" "app_username" {
+  name = "/app/karaoke/${var.environment}/APP_USERNAME"
+  type = "String"
+  value = var.postgres_app_username
+}
+
+resource "aws_ssm_parameter" "app_password" {
+  name = "/app/karaoke/${var.environment}/APP_PASSWORD"
+  type = "SecureString"
   value = random_password.password.result
 }
 
-resource "random_password" "password" {
+resource "aws_ssm_parameter" "postgres_password" {
+  name  = "/app/karaoke/${var.environment}/POSTGRES_PASSWORD"
+  type  = "SecureString"
+  value = random_password.postgres_password.result
+}
+
+resource "random_password" "app_password" {
+  length  = 8
+  special = false
+}
+
+resource "random_password" "postgres_password" {
   length  = 8
   special = false
 }
@@ -63,79 +80,5 @@ resource "aws_security_group" "postgres_security_group" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
-
-
-resource "kubernetes_job_v1" "postgres_migrations" {
-  metadata {
-    name = "postgres-migrations"
-    namespace = "${var.app_name}-${var.environment}"
-  }
-
-  spec {
-    template {
-      metadata {
-        
-      }
-      spec {
-        container {
-          name = "postgres-migrations"
-          image = "flyway/flyway"
-          args = ["migrate"]
-
-          env {
-            name = "FLYWAY_URL"
-            value = local.flyway_db_url
-          }
-          env {
-            name = "FLYWAY_USER"
-            value = local.postgres_user
-          }
-          env {
-            name = "FLYWAY_PASSWORD"
-            value_from {
-              secret_key_ref {
-                name = kubernetes_secret_v1.postres_password.metadata.0.name 
-                key = "POSTGRES_PASSWORD"
-              }
-            }
-          }
-
-          volume_mount {
-            name = "sql"
-            mount_path = "/flyway/sql"            
-          }
-        }
-        volume {
-          name = "sql"
-          config_map {
-            name = kubernetes_config_map_v1.migration_files.metadata.0.name
-          }
-        }
-        restart_policy = "Never"
-      }
-    }
-  }
-}
-
-resource "kubernetes_config_map_v1" "migration_files" {
-  metadata {
-    name = "postgres-migrations-files"
-    namespace = "${var.app_name}-${var.environment}"
-  }
-
-  data = {for f in local.migrations: f => file("${var.migrations_dir}/${f}")}
-}
-
-resource "kubernetes_secret_v1" "postres_password" {
-  metadata {
-    name = "postgres-password"
-    namespace = "${var.app_name}-${var.environment}"
-  }
-
-  data = {
-    "POSTGRES_PASSWORD" = aws_ssm_parameter.postgres_password.value
   }
 }

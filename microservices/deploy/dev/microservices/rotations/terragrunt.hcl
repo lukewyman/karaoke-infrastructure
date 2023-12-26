@@ -38,5 +38,34 @@ inputs = {
   image_version         = "v1"
   namespace_root        = "karaoke"
   node_port             = "31283"
+  service_account_name  = ""
   service_name          = "rotations"
+}
+
+generate "backend" {
+  path = "backend.tf"
+  if_exists = "overwrite"
+  contents = <<EOF 
+terraform {
+  required_version = ">= 1.6.2"
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.23"
+    }
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "~> 2.24"
+    }
+  }
+
+  backend "remote" {
+    organization = "spikes"
+
+    workspaces {
+      prefix = "karaoke-rotations-"
+    }
+  }
+}
+  EOF
 }

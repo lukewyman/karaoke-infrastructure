@@ -82,6 +82,11 @@ variable "node_port" {
   type        = string
 }
 
+variable "service_account_name" {
+  description = ""
+  type = string 
+}
+
 variable "service_name" {
   description = ""
   type        = string

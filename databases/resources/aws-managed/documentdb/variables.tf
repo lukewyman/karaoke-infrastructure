@@ -34,6 +34,11 @@ variable "docdb_subnet_ids" {
   type        = list(string)
 }
 
+variable "docdb_username" {
+  description = ""
+  type = string
+}
+
 variable "cluster_certificate_authority_data" {
   description = ""
   type = string

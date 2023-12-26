@@ -4,6 +4,11 @@ variable "app_name" {
   default     = "karaoke"
 }
 
+variable "aws_iam_openid_connect_provider_arn" {
+  description = "(optional) describe your variable"
+  type = string  
+}
+
 variable "aws_region" {
   description = "AWS region in which to deploy resources"
   type        = string

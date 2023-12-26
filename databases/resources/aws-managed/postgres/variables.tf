@@ -78,6 +78,11 @@ variable "private_subnets_cidr_blocks" {
   type        = list(string)
 }
 
+variable "postgres_app_username" {
+  description = ""
+  type = string 
+}
+
 variable "public_subnets_cidr_blocks" {
   description = "List of CIDR blocks for the public subnets"
   type        = list(string)
