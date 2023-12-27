@@ -3,7 +3,7 @@ include "root" {
 }
 
 terraform {
-  source = "${get_parent_terragrunt_dir("root")}/core/resources/vpc"
+  source = "${get_parent_terragrunt_dir("root")}/_resources/core/vpc"
 }
 
 inputs = {
@@ -18,4 +18,3 @@ inputs = {
   vpc_public_subnets                     = ["10.0.1.0/24", "10.0.2.0/24"]
   vpc_single_nat_gateway                 = true
 }
-

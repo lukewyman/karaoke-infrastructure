@@ -3,7 +3,7 @@ include "root" {
 }
 
 terraform {
-  source = "${get_parent_terragrunt_dir("root")}/core/resources/eks-addons"
+  source = "${get_parent_terragrunt_dir("root")}/_resources/core/eks-addons"
 }
 
 dependency "eks_cluster" {
