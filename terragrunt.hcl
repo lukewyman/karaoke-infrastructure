@@ -13,10 +13,11 @@ remote_state {
   }
 
   config = {
-    bucket         = "karaoke-infrastructure-state"
-    key            = "${path_relative_to_include("root")}/terraform.tfstate"
-    encrypt        = true
-    dynamodb_table = "karaoke-infrastructure-state"
-    region         = "us-east-1"
+    bucket               = "karaoke-infrastructure-state"
+    key                  = "${path_relative_to_include("root")}/terraform.tfstate"
+    encrypt              = true
+    dynamodb_table       = "karaoke-infrastructure-state"
+    region               = "us-east-1"
+    workspace_key_prefix = "karaoke"
   }
 }
