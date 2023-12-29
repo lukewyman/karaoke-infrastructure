@@ -18,7 +18,7 @@ dependency "eks_cluster" {
 }
 
 inputs = {
-  app_name = "karaoke"
+  app_name                           = "karaoke"
   aws_region                         = "us-east-1"
   cluster_certificate_authority_data = dependency.eks_cluster.outputs.cluster_certificate_authority_data
   eks_cluster_endpoint               = dependency.eks_cluster.outputs.eks_cluster_endpoint
