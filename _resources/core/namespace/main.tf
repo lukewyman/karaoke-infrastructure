@@ -18,6 +18,10 @@ variable "eks_cluster_id" {
   type = string 
 }
 
+variable "environment" {
+  type = string 
+}
+
 provider "aws" {
   region = var.aws_region
 }
@@ -33,16 +37,10 @@ data "aws_eks_cluster_auth" "cluster_auth" {
 }
 
 
-# NAMESPACES
+# NAMESPACE
 
 resource "kubernetes_namespace_v1" "dev_namespace" {
   metadata {
-    name = "${var.app_name}-dev"
-  }
-}
-
-resource "kubernetes_namespace_v1" "test_namespace" {
-  metadata {
-    name = "${var.app_name}-test"
+    name = "${var.app_name}-${var.environment}"
   }
 }

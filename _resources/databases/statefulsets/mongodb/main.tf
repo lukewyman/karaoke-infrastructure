@@ -14,6 +14,8 @@ resource "helm_release" "mongodb" {
   chart = "mongodb"
   version = "14.2.5"
 
+  namespace = local.app_name
+
   set {
     name = "architecture"
     value = "standalone"

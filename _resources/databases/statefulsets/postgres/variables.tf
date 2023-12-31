@@ -1,9 +1,9 @@
-variable "aws_region" {
+variable "app_name" {
   description = ""
   type        = string
 }
 
-variable "app_name" {
+variable "aws_region" {
   description = ""
   type        = string
 }

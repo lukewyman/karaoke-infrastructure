@@ -9,7 +9,7 @@ terraform {
 inputs = {
   app_name    = "karaoke"
   aws_region  = "us-east-1"
-  environment = "test"
+  environment = "cicd"
   table_names = {
     "queues" = {
       "attributes" = {
@@ -42,4 +42,4 @@ inputs = {
   }
 }
 
-skip = false
+skip = true
