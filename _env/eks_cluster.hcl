@@ -1,3 +1,7 @@
+terraform {
+  source = "github.com/lukewyman/karaoke-resources.git//core/eks-cluster?ref=main"
+}
+
 dependency "vpc" {
   config_path = "../vpc"
 

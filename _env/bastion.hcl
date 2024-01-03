@@ -1,3 +1,7 @@
+terraform {
+  source = "github.com/lukewyman/karaoke-resources.git//core/bastion?ref=main"
+}
+
 dependency "vpc" {
   config_path = "../vpc"
 

@@ -1,3 +1,7 @@
+terraform {
+  source = "github.com/lukewyman/karaoke-resources.git//core/eks-addons?ref=main"
+}
+
 dependency "eks_cluster" {
   config_path = "../eks-cluster"
 

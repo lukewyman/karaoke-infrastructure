@@ -1,0 +1,16 @@
+use('admin')
+db.auth('admin', 'password1')
+
+const database = "song-library";
+const collection = "songs";
+
+use(database);
+db.createCollection(collection);
+
+db.createUser(
+  {
+    user: "songs_app",
+    pwd: "password2",
+    roles: [ "readWrite" ]
+  }
+);

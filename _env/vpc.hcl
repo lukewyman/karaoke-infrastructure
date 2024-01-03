@@ -1,3 +1,7 @@
+terraform {
+  source = "github.com/lukewyman/karaoke-resources.git//core/vpc?ref=main"
+}
+
 inputs = {
   app_name                               = "karaoke"
   aws_region                             = "us-east-1"

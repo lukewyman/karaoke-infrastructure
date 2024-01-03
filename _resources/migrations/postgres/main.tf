@@ -46,7 +46,7 @@ resource "kubernetes_job_v1" "postgres_migrations" {
             name = kubernetes_config_map_v1.migration_files.metadata.0.name
           }
         }
-        restart_policy = "Never"
+        restart_policy = "OnFailure"
       }
     }
   }
@@ -72,7 +72,7 @@ resource "random_password" "password" {
 resource "kubernetes_config_map_v1" "migration_files" {
   metadata {
     name      = "postgres-migrations-files"
-    namespace = "${var.app_name}-${var.environment}"
+    namespace = local.app_name
   }
 
   data = {
