@@ -1,7 +1,7 @@
 generate "provider_versions" {
-  path = "provider_versions.tf"
+  path      = "provider_versions.tf"
   if_exists = "overwrite"
-  contents = <<EOF
+  contents  = <<EOF
 terraform {
   required_providers {
     aws = {

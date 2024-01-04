@@ -26,4 +26,4 @@ inputs = {
   environment                        = "cicd"
 }
 
-skip = true 
+skip = false 

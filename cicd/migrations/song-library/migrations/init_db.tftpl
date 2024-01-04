@@ -1,5 +1,5 @@
 use('admin')
-db.auth('admin', 'password1')
+db.auth('${admin_username}', '${admin_password}')
 
 const database = "song-library";
 const collection = "songs";
@@ -9,8 +9,8 @@ db.createCollection(collection);
 
 db.createUser(
   {
-    user: "songs_app",
-    pwd: "password2",
+    user: "${app_username}",
+    pwd: "${app_password}",
     roles: [ "readWrite" ]
   }
 );

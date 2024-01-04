@@ -49,9 +49,9 @@ inputs = {
 }
 
 generate "backend" {
-  path = "backend.tf"
+  path      = "backend.tf"
   if_exists = "overwrite"
-  contents = <<EOF
+  contents  = <<EOF
 terraform {
   required_version = ">= 1.6.2"
   required_providers {

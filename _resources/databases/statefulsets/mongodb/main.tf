@@ -1,18 +1,8 @@
-# resource "kubernetes_config_map_v1" "config_map" {
-#   metadata {
-#     name = "db-creation-script"
-#   }
-
-#   data = {
-#     "init" = "${file("${path.module}/db_scripts/file_name???")}"
-#   }
-# }
-
 resource "helm_release" "mongodb" {
   name = "${local.app_name}-mongodb"
   repository = "https://charts.bitnami.com/bitnami"
   chart = "mongodb"
-  version = "14.2.5"
+  version = "14.4.9"
 
   namespace = local.app_name
 
@@ -30,5 +20,32 @@ resource "helm_release" "mongodb" {
     name = "global.storageClass"
     value = "ebs-sc"
   }
+
+  set {
+    name = "auth.rootUser"
+    value = aws_ssm_parameter.admin_username.value
+  }
+
+  set {
+    name = "auth.rootPassword"
+    value = aws_ssm_parameter.admin_password.value
+  }
   
+}
+
+resource "aws_ssm_parameter" "admin_username" {
+  name = "/app/${var.app_name}/${var.environment}/mongo/USERNAME"
+  type = "String"
+  value = "admin"
+}
+
+resource "aws_ssm_parameter" "admin_password" {
+  name = "/app/${var.app_name}/${var.environment}/mongo/PASSWORD"
+  type = "SecureString"
+  value = random_password.admin_password.result
+}
+
+resource "random_password" "admin_password" {
+  length = 8
+  special = false
 }

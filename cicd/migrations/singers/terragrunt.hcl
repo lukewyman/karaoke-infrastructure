@@ -40,3 +40,5 @@ inputs = {
   postgres_user                       = "singers_app"
   service_account_name                = "singers-migrations"
 }
+
+skip = false

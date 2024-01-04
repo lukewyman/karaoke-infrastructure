@@ -3,7 +3,7 @@ variable "app_name" {
   type        = string
 }
 
-variable "app_user" {
+variable "app_username" {
   description = ""
   type        = string
 }
@@ -43,12 +43,22 @@ variable "migrations_dir" {
   type        = string
 }
 
+variable "mongo_service_name" {
+  description = ""
+  type = string
+}
+
 variable "db_port" {
   description = ""
   type        = string
 }
 
 variable "service_account_name" {
+  description = ""
+  type        = string
+}
+
+variable "service_name" {
   description = ""
   type        = string
 }
