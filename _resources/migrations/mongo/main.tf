@@ -17,7 +17,7 @@ resource "kubernetes_job_v1" "mongo_migrations" {
           image   = "mongo:7.0.5-rc0"
           command = ["bin/bash", "-c", local.init_db_bash_script]
           volume_mount {
-            name = "mongo-migration-files"
+            name = "migrations"
             mount_path = "/opt"
           }
 
@@ -34,7 +34,7 @@ resource "kubernetes_job_v1" "mongo_migrations" {
         }
 
         volume {
-          name = "mongo-migration-files"
+          name = "migrations"
           config_map {
             name = kubernetes_config_map_v1.migration_files.metadata.0.name
           }
@@ -51,7 +51,7 @@ resource "kubernetes_config_map_v1" "migration_files" {
   }
 
   data = {
-    "createdb.js" = templatefile("${path.module}/${migrations_dir}/init_db.tftpl", {
+    "init-db.js" = templatefile("${path.module}/${var.migrations_dir}/init_db.tftpl", {
       admin_username = data.aws_ssm_parameter.admin_username.value,
       admin_password = data.aws_ssm_parameter.admin_password.value,
       app_username   = aws_ssm_parameter.app_username.value,
@@ -69,11 +69,18 @@ resource "aws_ssm_parameter" "app_username" {
 resource "aws_ssm_parameter" "app_password" {
   name = "/app/${var.app_name}/${var.environment}/${var.service_name}/PASSWORD"
   type = "SecureString"
+  value = random_password.app_password.result
+}
+
+resource "random_password" "app_password" {
+  length  = 8
+  special = false
 }
 
 resource "kubernetes_secret_v1" "app_password" {
   metadata {
     name = "mongo-app-password"
+    namespace = local.app_name
   }
 
   data = {

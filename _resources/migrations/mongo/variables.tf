@@ -56,6 +56,7 @@ variable "db_port" {
 variable "service_account_name" {
   description = ""
   type        = string
+  default     = null
 }
 
 variable "service_name" {

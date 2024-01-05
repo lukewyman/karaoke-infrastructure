@@ -1,5 +1,5 @@
 resource "helm_release" "mongodb" {
-  name = "${local.app_name}-mongodb"
+  name = "mongo"
   repository = "https://charts.bitnami.com/bitnami"
   chart = "mongodb"
   version = "14.4.9"

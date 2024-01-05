@@ -24,7 +24,7 @@ resource "helm_release" "postgres" {
 }
 
 resource "aws_ssm_parameter" "postgres_password" {
-  name  = "/app/${var.app_name}/${var.environment}/POSTGRES_PASSWORD"
+  name  = "/app/${var.app_name}/${var.environment}/postgres/PASSWORD"
   type  = "SecureString"
   value = random_password.password.result
 }

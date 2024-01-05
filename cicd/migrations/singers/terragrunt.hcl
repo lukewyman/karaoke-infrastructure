@@ -41,4 +41,4 @@ inputs = {
   service_account_name                = "singers-migrations"
 }
 
-skip = false
+skip = true

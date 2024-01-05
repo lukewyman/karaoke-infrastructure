@@ -35,8 +35,9 @@ inputs = {
   eks_cluster_id                      = dependency.eks_cluster.outputs.eks_cluster_id
   environment                         = "cicd"
   migrations_dir                      = "migrations"
-  mongo_service_name                  = "karaoke-cicd-mongodb"
+  mongo_service_name                  = "mongo-mongodb"
   db_port                             = "27017"
-  service_account_name                = ""
   service_name                        = "song-library"
 }
+
+skip = false
