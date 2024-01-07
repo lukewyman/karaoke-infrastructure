@@ -35,7 +35,7 @@ inputs = {
   eks_cluster_id                      = dependency.eks_cluster.outputs.eks_cluster_id
   environment                         = "cicd"
   migrations_dir                      = "migrations"
-  mongo_service_name                  = "mongo-mongodb"
+  mongo_service_name                  = dependency.mongo.outputs.mongo_service_name
   db_port                             = "27017"
   service_name                        = "song-library"
 }

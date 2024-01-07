@@ -3,7 +3,7 @@ variable "app_name" {
   type        = string
 }
 
-variable "app_user" {
+variable "app_username" {
   description = ""
   type        = string
 }
@@ -54,6 +54,12 @@ variable "postgres_service_name" {
 }
 
 variable "service_account_name" {
+  description = ""
+  type        = string
+  default     = null
+}
+
+variable "service_name" {
   description = ""
   type        = string
 }

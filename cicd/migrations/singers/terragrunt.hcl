@@ -27,7 +27,7 @@ dependency "postgres" {
 
 inputs = {
   app_name                            = "karaoke"
-  app_user                            = "singers_app"
+  app_username                        = "singers_app"
   aws_region                          = "us-east-1"
   aws_iam_openid_connect_provider_arn = dependency.eks_cluster.outputs.aws_iam_openid_connect_provider_arn
   cluster_certificate_authority_data  = dependency.eks_cluster.outputs.cluster_certificate_authority_data
@@ -37,8 +37,7 @@ inputs = {
   migrations_dir                      = "migrations"
   db_port                             = "5432"
   postgres_service_name               = dependency.postgres.outputs.postgres_service_name
-  postgres_user                       = "singers_app"
-  service_account_name                = "singers-migrations"
+  service_name                        = "singers"
 }
 
-skip = true
+skip = false

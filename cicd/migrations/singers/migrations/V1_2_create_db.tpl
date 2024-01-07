@@ -1,5 +1,0 @@
-DROP DATABASE IF EXISTS singers;
-
-CREATE DATABASE singers WITH
-  OWNER = singers_app
-  ENCODING = 'UTF8';

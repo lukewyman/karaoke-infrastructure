@@ -1,4 +1,6 @@
 resource "kubernetes_job_v1" "postgres_migrations" {
+  depends_on = [ kubernetes_config_map_v1.migration_files ]
+  
   metadata {
     name      = "postgres-migrations"
     namespace = local.app_name
@@ -14,7 +16,7 @@ resource "kubernetes_job_v1" "postgres_migrations" {
 
         container {
           name  = "postgres-migrations"
-          image = "flyway/flyway"
+          image = "flyway/flyway:10.4-alpine"
           args  = ["migrate"]
 
           env {
@@ -24,6 +26,10 @@ resource "kubernetes_job_v1" "postgres_migrations" {
           env {
             name  = "FLYWAY_USER"
             value = "postgres"
+          }
+          env {
+            name = "FLYWAY_MIXED"
+            value = true
           }
           env {
             name = "FLYWAY_PASSWORD"
@@ -52,14 +58,14 @@ resource "kubernetes_job_v1" "postgres_migrations" {
   }
 }
 
-resource "aws_ssm_parameter" "postgres_app_user" {
-  name = "/app/${var.app_name}/${var.environment}/app_user"
+resource "aws_ssm_parameter" "app_username" {
+  name = "/app/${var.app_name}/${var.environment}/${var.service_name}/USERNAME"
   type = "String"
-  value = var.app_user
+  value = var.app_username
 }
 
-resource "aws_ssm_parameter" "postgres_app_password" {
-  name = "/app/${var.app_name}/${var.environment}/app_password"
+resource "aws_ssm_parameter" "app_password" {
+  name = "/app/${var.app_name}/${var.environment}/${var.service_name}/PASSWORD"
   type = "SecureString"
   value = random_password.password.result
 }
@@ -76,10 +82,10 @@ resource "kubernetes_config_map_v1" "migration_files" {
   }
 
   data = {
-    "V1_1_create_user.sql"      = data.template_file.create_user.rendered
-    "V1_2_create_db.sql"        = data.template_file.create_db.rendered
-    "V1_3_grant_privileges.sql" = data.template_file.grant_privileges.rendered
-    "V1_4_create_tables.sql"    = data.template_file.create_tables.rendered
+    "V1__init_db.sql"      = templatefile("${path.module}/${var.migrations_dir}/V1__init_db.tftpl", {
+      app_username = aws_ssm_parameter.app_username.value,
+      app_password = aws_ssm_parameter.app_password.value
+    })
   }
 }
 
