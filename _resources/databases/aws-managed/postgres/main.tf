@@ -20,7 +20,7 @@ resource "aws_db_instance" "postgres_instance" {
   identifier             = "${local.app_name}-postgresql-instance"
   instance_class         = var.db_instance_type
   username               = "postgres"
-  password               = random_password.postgres_password.result
+  password               = aws_ssm_parameter.postgres_password.value
   port                   = var.db_port
   skip_final_snapshot    = true
   storage_type           = var.db_storage_type
@@ -33,30 +33,13 @@ resource "aws_db_subnet_group" "postgres_subnet_group" {
   subnet_ids = var.db_subnet_ids
 }
 
-resource "aws_ssm_parameter" "app_username" {
-  name = "/app/karaoke/${var.environment}/APP_USERNAME"
-  type = "String"
-  value = var.postgres_app_username
-}
-
-resource "aws_ssm_parameter" "app_password" {
-  name = "/app/karaoke/${var.environment}/APP_PASSWORD"
-  type = "SecureString"
-  value = random_password.app_password.result
-}
-
 resource "aws_ssm_parameter" "postgres_password" {
-  name  = "/app/karaoke/${var.environment}/POSTGRES_PASSWORD"
+  name  = "/app/${var.app_name}/${var.environment}/postgres/PASSWORD"
   type  = "SecureString"
-  value = random_password.postgres_password.result
+  value = random_password.password.result
 }
 
-resource "random_password" "app_password" {
-  length  = 8
-  special = false
-}
-
-resource "random_password" "postgres_password" {
+resource "random_password" "password" {
   length  = 8
   special = false
 }

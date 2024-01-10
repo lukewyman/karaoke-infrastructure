@@ -1,5 +1,4 @@
 locals {
-  app_name = "${var.app_name}-${var.environment}-dbs-managed"
+  app_name = "${var.app_name}-${var.environment}"
 
-  service_account_name = "docdb-full-access"
 }

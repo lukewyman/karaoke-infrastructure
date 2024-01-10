@@ -7,5 +7,8 @@ include "eks_cluster" {
 }
 
 inputs = {
+  cluster_desired_size = 2
+  cluster_max_size = 3
+  cluster_min_size = 1
   environment = "dev"
 }

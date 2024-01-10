@@ -17,8 +17,8 @@ resource "aws_docdb_cluster" "docdb" {
   engine                          = "docdb"
   engine_version                  = var.docdb_engine_version
   db_cluster_parameter_group_name = aws_docdb_cluster_parameter_group.docdb_parameter_group.name
-  master_username                 = aws_ssm_parameter.docdb_username.value
-  master_password                 = aws_ssm_parameter.docdb_password.value
+  master_username                 = aws_ssm_parameter.admin_username.value
+  master_password                 = aws_ssm_parameter.admin_password.value
   deletion_protection             = false
   port                            = var.docdb_port
   db_subnet_group_name            = aws_docdb_subnet_group.docdb_subnets.name
@@ -49,20 +49,20 @@ resource "aws_docdb_subnet_group" "docdb_subnets" {
   subnet_ids = var.docdb_subnet_ids
 }
 
-resource "aws_ssm_parameter" "docdb_username" {
-  name  = "/app/karaoke/${var.environment}/DOCDB_USERNAME"
-  type  = "String"
-  value = var.docdb_username
+resource "aws_ssm_parameter" "admin_username" {
+  name = "/app/${var.app_name}/${var.environment}/mongo/USERNAME"
+  type = "String"
+  value = "mongo_admin"
 }
 
-resource "aws_ssm_parameter" "docdb_password" {
-  name  = "/app/karaoke/${var.environment}/DOCDB_PASSWORD"
-  type  = "SecureString"
-  value = random_password.password.result
+resource "aws_ssm_parameter" "admin_password" {
+  name = "/app/${var.app_name}/${var.environment}/mongo/PASSWORD"
+  type = "SecureString"
+  value = random_password.admin_password.result
 }
 
-resource "random_password" "password" {
-  length  = 8
+resource "random_password" "admin_password" {
+  length = 8
   special = false
 }
 
