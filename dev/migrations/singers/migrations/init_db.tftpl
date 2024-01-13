@@ -3,21 +3,12 @@ CREATE USER ${app_username} WITH
   PASSWORD '${app_password}';
 
 
+GRANT singers_app TO postgres;
+
+
 CREATE DATABASE singers WITH
   OWNER = ${app_username}
   ENCODING = 'UTF8';
 
 
 GRANT ALL PRIVILEGES ON DATABASE singers TO ${app_username};
-
-
-\c singers ${app_username};
-
-CREATE TABLE singers (
-  id UUID NOT NULL, 
-  email VARCHAR, 
-  first_name VARCHAR, 
-  last_name VARCHAR, 
-  stage_name VARCHAR, 
-  PRIMARY KEY (id)
-);
