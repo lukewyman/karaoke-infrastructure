@@ -3,7 +3,7 @@ include "root" {
 }
 
 terraform {
-  source = "${get_parent_terragrunt_dir("root")}/_resources/databases/aws-managed/postgres"
+  source = "github.com/lukewyman/karaoke-resources.git//databases/aws-managed/postgres?ref=main"
 }
 
 dependency "eks_cluster" {

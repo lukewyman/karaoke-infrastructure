@@ -3,7 +3,7 @@ include "root" {
 }
 
 terraform {
-  source = "${get_parent_terragrunt_dir("root")}/_resources/service-accounts"
+  source = "github.com/lukewyman/karaoke-resources.git//service-accounts?ref=main"
 }
 
 dependency "eks_cluster" {

@@ -3,7 +3,7 @@ include "root" {
 }
 
 terraform {
-  source = "${get_parent_terragrunt_dir("root")}/_resources/databases/serverless/dynamodb"
+  source = "github.com/lukewyman/karaoke-resources.git//databases/serverless/dynamodb?ref=main"
 }
 
 inputs = {

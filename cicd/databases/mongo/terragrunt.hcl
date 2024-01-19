@@ -3,7 +3,7 @@ include "root" {
 }
 
 terraform {
-  source = "${get_parent_terragrunt_dir("root")}/_resources/databases/statefulsets/mongodb"
+  source = "github.com/lukewyman/karaoke-resources.git//databases/statefulsets/mongodb?ref=main"
 }
 
 dependency "eks_cluster" {
