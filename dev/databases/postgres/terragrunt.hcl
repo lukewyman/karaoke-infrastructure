@@ -6,15 +6,8 @@ terraform {
   source = "github.com/lukewyman/karaoke-resources.git//databases/aws-managed/postgres?ref=main"
 }
 
-dependency "eks_cluster" {
-  config_path = "${get_terragrunt_dir()}/../../core/eks-cluster"
-
-  mock_outputs = {
-    cluster_certificate_authority_data  = "bW9ja19jZXJ0X2F1dGhfZGF0YQ=="
-    eks_cluster_endpoint                = "mock_cluster_endpoint"
-    eks_cluster_id                      = "mock_cluster_id"
-    aws_iam_openid_connect_provider_arn = "mock_oicd_arn"
-  }
+include "postgres" {
+  path = "${get_terragrunt_dir()}/../../../_env/postgres.hcl"
 }
 
 dependency "vpc" {
@@ -31,18 +24,13 @@ dependency "vpc" {
 
 inputs = {
   allocated_storage                   = 20
-  app_name                            = "karaoke"
   aws_iam_openid_connect_provider_arn = dependency.eks_cluster.outputs.aws_iam_openid_connect_provider_arn
-  aws_region                          = "us-east-1"
-  cluster_certificate_authority_data  = dependency.eks_cluster.outputs.cluster_certificate_authority_data
   db_engine                           = "postgres"
   db_engine_version                   = "15.3"
   db_instance_type                    = "db.t3.medium"
   db_port                             = "5432"
   db_storage_type                     = "gp3"
   db_subnet_ids                       = dependency.vpc.outputs.database_subnets
-  eks_cluster_endpoint                = dependency.eks_cluster.outputs.eks_cluster_endpoint
-  eks_cluster_id                      = dependency.eks_cluster.outputs.eks_cluster_id
   environment                         = "dev"
   migrations_dir                      = "migrations"
   private_subnets_cidr_blocks         = dependency.vpc.outputs.private_subnets_cidr_blocks
